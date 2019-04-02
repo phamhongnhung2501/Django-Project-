@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Thuc Hanh Chuyen Sau</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/series-label.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/modules/export-data.js"></script>
+	<meta http-equiv="refresh" content="3">
+</head>
+<body>
+
+		<div class="container ">
+		  <div class="row p-5">
+		    <div class="col-sm-4 text-center">
+		      	<div class="card">
+				  <img src="http://haircompanion.co.uk/wp-content/uploads/2016/02/temperature-controlled.jpg" class="card-img-top" alt="...">
+				  <div class="card-body">
+				    <h3>Temp: {{time.Temperature}} °C</h3>
+				  </div>
+				</div>
+		    </div>
+		    <div class="col-sm-4 text-center">
+		      <div class="card">
+				  <img src="https://media.istockphoto.com/vectors/humidity-icon-isolated-with-long-shadow-weather-and-meteorology-vector-id939156212?k=6&m=939156212&s=612x612&w=0&h=42VaKPTYEEIgsBWko3HpofR_I5EheqlknVjtsVAoHlY=" class="card-img-top" alt="...">
+				  <div class="card-body">
+				   <h3>Humidity: {{time.Humidity}} %</h3>
+				  </div>
+				</div>
+		    </div>
+		    {% if  time.Light == 1 %}
+		    <div class="col-sm-4 text-center">
+		      <div class="card">
+				  <img src="https://proxy.spigotmc.org/c5438d3cd4f3b3aee4526158689bacfc35a9c218?url=http%3A%2F%2Fblogs.psychcentral.com%2Ftherapy-soup%2Ffiles%2F2013%2F11%2F190593_4590.jpg" class="card-img-top" alt="...">
+				  <div class="card-body">
+				   	<h3>Light: On</h3>
+				  </div>
+				</div>
+		    </div>
+		    {% else %}
+		    <div class="col-sm-4 text-center">
+		      <div class="card">
+				  <img src="http://i.imgur.com/T5H4MHE.png" class="card-img-top" alt="...">
+				  <div class="card-body">
+				    <h3>Light: Off</h3>
+				  </div>
+				</div>	
+		    </div>	    
+		    {% endif %}
+		  <!--   <div class="col-sm-3 text-center">
+		      <div class="card">
+				   
+  				
+				  <div class="card-body">
+				
+				  
+				   {% if  time.Light == 1 %}
+				   	<button type="button" class="btn btn-outline-warning">LedOn</button>
+				   {% else %}
+				    <button type="button" class="btn btn-outline-danger">LedOff</button>
+				   	{% endif %}
+		
+				  </div>
+				</div>
+		    </div> -->
+		  </div>
+		  <table class="table p-5" >
+			  <thead>
+			    <tr class="table-danger">
+			      <th scope="col">ID_Sensor</th>
+			      <th scope="col">Date_and_Time</th>
+			      <th scope="col">Temperature</th>
+			      <th scope="col">Humidity</th>
+			      <th scope="col">Light</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{% for number in sensor %}
+
+			    <tr class="table-primary">
+			      <td>{{number.SensorID}}</td>
+			      <td>{{number.Date_and_Time}}</td>
+			      <td>{{number.Temperature}}</td>
+			      <td>{{number.Humidity}}</td>
+			      <td>{{number.Light}}</td>
+			    </tr>
+			   {% endfor %}
+			  </tbody>
+		</table>
+	</div>	
+
+	<div id="container1" class="column"></div>
+	  <script>
+	      Highcharts.chart('container1', {
+	          chart: {
+	              type: 'line'
+	          },
+	          title: {
+	              text: 'Temperature'
+	          },
+	          subtitle: {
+	              text: 'Sensor: DHT11'
+	          },
+	          xAxis: {
+	              categories: [{% for number in sensor %}
+	  '{{ number.Date_and_Time }}',
+	  {% endfor %}]
+	          },
+	          yAxis: {
+	              title: {
+	                  text: 'Temperature (°C'
+	              }
+	          },
+	          plotOptions: {
+	              line: {
+	                  dataLabels: {
+	                      enabled: true
+	                  },
+	                  enableMouseTracking: false
+	              }
+	          },
+	          series: [{
+	              name: 'DHT11',
+	              data: [{% for number in sensor %}
+	  {{ number.Temperature}},
+	  {% endfor %},]
+	          } ]
+	      });
+  </script>
+
+
+	 <div id="container2" class="column"></div>
+	  <script>
+	      Highcharts.chart('container2', {
+	          chart: {
+	              type: 'line'
+	          },
+	          title: {
+	              text: 'Humidity'
+	          },
+	          subtitle: {
+	              text: 'Sensor: DHT11'
+	          },
+	          xAxis: {
+	              categories: [{% for number in sensor %}
+	  '{{ number.Date_and_Time }}',
+	  {% endfor %}]
+	          },
+	          yAxis: {
+	              title: {
+	                  text: 'Humidity (%)'
+	              }
+	          },
+	          plotOptions: {
+	              line: {
+	                  dataLabels: {
+	                      enabled: true
+	                  },
+	                  enableMouseTracking: false
+	              }
+	          },
+	          series: [{
+	              name: 'DHT11',
+	              data: [{% for number in sensor %}
+	  {{ number.Humidity }},
+	  {% endfor %},]
+	          } ]
+	      });
+  </script>
+
+   <div id="container3" class="column"></div>
+	  <script>
+	      Highcharts.chart('container3', {
+	          chart: {
+	              type: 'line'
+	          },
+	          title: {
+	              text: 'Light'
+	          },
+	          subtitle: {
+	              text: 'Sensor: Flying Fish'
+	          },
+	          xAxis: {
+	              categories: [{% for number in sensor %}
+	  '{{ number.Date_and_Time }}',
+	  {% endfor %}]
+	          },
+	          yAxis: {
+	              title: {
+	                  text: 'Light'
+	              }
+	          },
+	          plotOptions: {
+	              line: {
+	                  dataLabels: {
+	                      enabled: true
+	                  },
+	                  enableMouseTracking: false
+	              }
+	          },
+	          series: [{
+	              name: 'DHT11',
+	              data: [{% for number in sensor %}
+	  {{ number.Light}},
+	  {% endfor %},]
+	          } ]
+	      });
+  </script>
+
+
+</body>
+</html>
